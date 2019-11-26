@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
 ##################################################################################
-# dyer - main utility for calling dyer processes
+# __init__.py - Handles notification operations for Dyer Tools
 #
 # Copyright (c) 2019, Kenneth P. J. Dyer <kenneth@avoceteditors.com>
 # All rights reserved.
@@ -31,71 +30,24 @@
 ##################################################################################
 
 # Module Imports
-import argparse
-import pathlib
-import pkg_resources
+import subprocess
 
-# Configure Logging
-import logging
-logger = logging.getLogger()
+# Local Imports
+import libdyer.tasks
 
-# Report Version Information
-def report_version(args):
-    """Reports the current version of the utility. """
-    name = "Dyer Tools"
-    byline = "General purpose utilities for writers and Linux users" 
-    version = "2019.1"
+# Logger Configuration
+from logging import getLogger
+logger = getLogger()
 
-    if args.verbose:
-        contents = [
-            f"{name} - {byline}",
-            "Kenneth P. J. Dyer <kenneth@avoceteditors.com>",
-            "Avocet Editorial Consulting",
-            f"Version: {version}"
-        ]
-        line = '\n  '.join(contents)
+def run(args):
+    logger.info("Called notifier operation")
+
+    if args.operation == "tasks":
+        logger.debug("Fetching Task Warrior data")
+        (title, text) = libdyer.tasks.fetch_task_counts()
     else:
-        line = f"{name} - version {version}"
+        text = ("Dyer Tools", "Testing notifications")
 
-    print(line)
-
-
-# Main Process
-if __name__ == '__main__':
-
-    # Initialize Parser
-    parser = argparse.ArgumentParser(
-        prog="dyer",
-        #usage="General purpose utility"
-    )
-    parser.set_defaults(func=report_version)
-
-    # Options
-    opts = parser.add_argument_group("Options")
-    opts.add_argument("-d", "--debug", action="store_true",
-        help="Enables debugging messages")
-    opts.add_argument("-v", "--verbose", action="store_true",
-        help="Enables verbose log messages")
-
-
-    # Parse Args
-    args = parser.parse_args()
-
-    # Configure Logging
-    log_format = "[ %(levelname)s]: %(message)s"
-    log_level = logging.WARNING
-
-    if args.verbose:
-        log_format = "[ %(levelname)s] (%(fileName)s:%(lineno)s): %(message)s"
-
-    if args.debug:
-        log_level = logging.DEBUG
-
-
-    logging.basicConfig(format=log_format, level=log_level)
-
-    # Run Operation
-    args.func(args)
-
+    subprocess.run(["notify-send", title, text])
 
 
