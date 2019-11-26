@@ -30,9 +30,7 @@ The purpose of notification subcommands is to provide a convenient interface for
 Tasks
 -------
 
-The ``tasks`` notifications subcommand retrieves project-level counts from Task Warrior then reports the pending tasks to the notification daemon.
-
-This subcommand is useful if you are a user of Task Warrior and would like period reminders of pending tasks.
+The ``tasks`` notifications subcommand retrieves project-level counts from Task Warrior then reports the pending tasks to the notification daemon.  This subcommand is useful if you are a user of Task Warrior and would like periodic reminders of pending tasks.
 
 
 
