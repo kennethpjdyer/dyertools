@@ -11,8 +11,6 @@ Installation
 
 To install DyerTools, run ``setup.py``:
 
-.. literal::
-
    $ python3 setup.py install 
 
 ********
