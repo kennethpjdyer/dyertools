@@ -37,7 +37,7 @@ import libdyer.tasks
 
 # Logger Configuration
 from logging import getLogger
-logger = getLogger()
+logger = getLogger("libdyer.notify")
 
 def run(args):
     logger.info("Called notifier operation")

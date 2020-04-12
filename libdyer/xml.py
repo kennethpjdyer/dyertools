@@ -1,5 +1,5 @@
 ##################################################################################
-# fetch.py - Module for retrieving Task Warrior data 
+# xml.py - Common variables for XML processing
 #
 # Copyright (c) 2019, Kenneth P. J. Dyer <kenneth@avoceteditors.com>
 # All rights reserved.
@@ -29,33 +29,21 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ##################################################################################
 
-# Module Imports
-from taskw import TaskWarrior
 
-# Logger Configuration
-from logging import getLogger
-logger = getLogger("libdyer.tasks")
+# Namespace Configuration
+xmlns = {
+    "xml": "http://www.w3.org/XML/1998/namespace",
+    "book": "http://docbook.org/ns/docbook",
+    "xi": "http://www.w3.org/2001/XInclude",
+    "xsl": "http://www.w3.org/1999/XSL/Transform",
+    "xlink": "http://www.w3.org/1999/xlink",
+    "dion": "http://avoceteditors.com/xml/dion"
+}
+xmlrns = {v: k for k, v in xmlns.items()}
 
-def fetch_task_counts():
-    """Function used to retrieve all Task Warrior information"""
-    logger.debug("Retrieving task count")
-    ttitle = "Task Warrior"
-    w = TaskWarrior()
-    tasks = w.load_tasks()['pending']
+# XPath Operations
+def xpath(element, path):
+    """Calls xpath() method on element, prepopulating namespaces"""
+    return element.xpath(path, namespaces=xmlns)
 
-    if len(tasks) == 0:
-        return (ttitle, "0 tasks pending")
-    else:
-        data = {}
 
-        for task in tasks:
-            if task['project'] in data:
-                data[task['project']] += 1
-            else:
-                data[task['project']] = 1
-
-        text = [f"Current workload pending: {len(tasks)} tasks"]
-        for key, value in data.items():
-            text.append(f"- {key}: {value}")
-
-        return (ttitle, "\n".join(text))

@@ -1,7 +1,6 @@
+"""log.py - Functions to configure and retrieve logger"""
 ##################################################################################
-# fetch.py - Module for retrieving Task Warrior data 
-#
-# Copyright (c) 2019, Kenneth P. J. Dyer <kenneth@avoceteditors.com>
+# Copyright (c) 2020, Kenneth P. J. Dyer <kenneth@avoceteditors.com>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -30,32 +29,24 @@
 ##################################################################################
 
 # Module Imports
-from taskw import TaskWarrior
+import logging
 
-# Logger Configuration
-from logging import getLogger
-logger = getLogger("libdyer.tasks")
+def set_logger(verbose, debug):
+    """ Runs basic config to initialize logging for application"""
 
-def fetch_task_counts():
-    """Function used to retrieve all Task Warrior information"""
-    logger.debug("Retrieving task count")
-    ttitle = "Task Warrior"
-    w = TaskWarrior()
-    tasks = w.load_tasks()['pending']
+    log_format = "[ %(levelname)s ]: %(message)s"
+    log_level = logging.WARNING
 
-    if len(tasks) == 0:
-        return (ttitle, "0 tasks pending")
-    else:
-        data = {}
+    if verbose and debug:
+        log_format = "[ %(levelname)s ] (%(name)s.%(filename)s:%(lineno)s): %(message)s"
+        log_level = logging.DEBUG
+    elif debug:
+        log_level = logging.DEBUG
+    elif verbose:
+        log_level = logging.INFO
 
-        for task in tasks:
-            if task['project'] in data:
-                data[task['project']] += 1
-            else:
-                data[task['project']] = 1
+    logging.basicConfig(format=log_format, level=log_level)
 
-        text = [f"Current workload pending: {len(tasks)} tasks"]
-        for key, value in data.items():
-            text.append(f"- {key}: {value}")
 
-        return (ttitle, "\n".join(text))
+def get_logger(name):
+    return logging.getLogger(name)

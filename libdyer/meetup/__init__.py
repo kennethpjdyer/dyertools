@@ -1,7 +1,7 @@
+"""__init__.py - Module containing main run commands for meetup tasks.
+"""
 ##################################################################################
-# fetch.py - Module for retrieving Task Warrior data 
-#
-# Copyright (c) 2019, Kenneth P. J. Dyer <kenneth@avoceteditors.com>
+# Copyright (c) 2020, Kenneth P. J. Dyer <kenneth@avoceteditors.com>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -30,32 +30,12 @@
 ##################################################################################
 
 # Module Imports
-from taskw import TaskWarrior
+import configparser
 
-# Logger Configuration
-from logging import getLogger
-logger = getLogger("libdyer.tasks")
+def config():
+    pass
 
-def fetch_task_counts():
-    """Function used to retrieve all Task Warrior information"""
-    logger.debug("Retrieving task count")
-    ttitle = "Task Warrior"
-    w = TaskWarrior()
-    tasks = w.load_tasks()['pending']
 
-    if len(tasks) == 0:
-        return (ttitle, "0 tasks pending")
-    else:
-        data = {}
 
-        for task in tasks:
-            if task['project'] in data:
-                data[task['project']] += 1
-            else:
-                data[task['project']] = 1
-
-        text = [f"Current workload pending: {len(tasks)} tasks"]
-        for key, value in data.items():
-            text.append(f"- {key}: {value}")
-
-        return (ttitle, "\n".join(text))
+def list_inactive(args):
+    pass
