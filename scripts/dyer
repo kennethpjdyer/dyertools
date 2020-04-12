@@ -36,6 +36,7 @@ import pathlib
 import pkg_resources
 
 # Local Imports
+import libdyer.build
 import libdyer.notify
 
 # Configure Logging
@@ -95,9 +96,36 @@ if __name__ == '__main__':
     cmd_notify_tasks = cmd_notify_ops.add_parser("tasks")
     cmd_notify_tasks.set_defaults(operation="tasks")
 
+    # Build Command
+    cmd_build = cmds.add_parser(
+        "build",
+        help="Builds project")
+    cmd_build.set_defaults(func=libdyer.build.run, operation="book")
+    cmd_build_ops = cmd_build.add_subparsers(title="Operations")
 
+    # Build Options
+    cmd_build.add_argument("-c", "--config", default="project.xml",
+        help="Sets the configuration file")
+    cmd_build.add_argument("-C", "--cache", default="build/tmp",
+        help="Sets the cache directory")
+    cmd_build.add_argument("-f", "--force", action="store_true",
+        help="Force recompile source data")
+    cmd_build.add_argument("-o", "--output", default="build",
+        help="Sets the output directory")
+    cmd_build.add_argument("-s", "--source", default="src",
+        help="Sets the source directory")
 
+    # Build Subcommands
+    cmd_build_latex = cmd_build_ops.add_parser("book")
+    cmd_build_latex.set_defaults(operation="book")
 
+    cmd_build_ch = cmd_build_ops.add_parser("chapter")
+    cmd_build_ch.set_defaults(operation="chapter")
+
+    cmd_build_web = cmd_build_ops.add_parser("web")
+    cmd_build_web.set_defaults(operation="web")
+
+    
 
     # Version Command
     cmd_version = cmds.add_parser(
@@ -114,7 +142,7 @@ if __name__ == '__main__':
     log_level = logging.WARNING
 
     if args.verbose:
-        log_format = "[ %(levelname)s ] (%(filename)s:%(lineno)s): %(message)s"
+        log_format = "[ %(levelname)s ] (%(name)s:%(filename)s:%(lineno)s): %(message)s"
 
     if args.debug:
         log_level = logging.DEBUG
